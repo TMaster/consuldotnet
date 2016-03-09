@@ -20,7 +20,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Consul
 {
@@ -445,7 +444,9 @@ namespace Consul
         {
             var request = _client.Put(string.Format("/v1/agent/check/{0}/{1}", status.Status, checkID));
             if (!string.IsNullOrEmpty(note))
-                request.Params.Add("note", Uri.EscapeDataString(note));
+            {
+                request.Params.Add("note", note);
+            }
             return request.Execute();
         }
 

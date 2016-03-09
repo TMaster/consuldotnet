@@ -34,10 +34,12 @@ namespace Consul
         IDistributedLock CreateLock(LockOptions opts);
         IDistributedLock CreateLock(string key);
         IEventEndpoint Event { get; }
+#if DNX451
         void ExecuteAbortableLocked(LockOptions opts, Action action);
         void ExecuteAbortableLocked(LockOptions opts, CancellationToken ct, Action action);
         void ExecuteAbortableLocked(string key, Action action);
         void ExecuteAbortableLocked(string key, CancellationToken ct, Action action);
+#endif
         void ExecuteInSemaphore(SemaphoreOptions opts, Action a);
         void ExecuteInSemaphore(string prefix, int limit, Action a);
         void ExecuteLocked(LockOptions opts, Action action);

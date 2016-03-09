@@ -29,15 +29,20 @@ namespace Consul.Test
             Assert.Equal("username", config.HttpAuth.UserName);
             Assert.Equal("password", config.HttpAuth.Password);
             Assert.Equal("https", config.Address.Scheme);
+#if DNX451
             Assert.True((config.Handler as WebRequestHandler).ServerCertificateValidationCallback(null, null, null,
                 SslPolicyErrors.RemoteCertificateChainErrors));
+#else
+            Assert.True((config.Handler as WinHttpHandler).ServerCertificateValidationCallback(null, null, null,
+                SslPolicyErrors.RemoteCertificateChainErrors));
+#endif
+
 
             Environment.SetEnvironmentVariable("CONSUL_HTTP_ADDR", string.Empty);
             Environment.SetEnvironmentVariable("CONSUL_HTTP_TOKEN", string.Empty);
             Environment.SetEnvironmentVariable("CONSUL_HTTP_AUTH", string.Empty);
             Environment.SetEnvironmentVariable("CONSUL_HTTP_SSL", string.Empty);
             Environment.SetEnvironmentVariable("CONSUL_HTTP_SSL_VERIFY", string.Empty);
-            ServicePointManager.ServerCertificateValidationCallback = null;
 
             var client = new ConsulClient(config);
 

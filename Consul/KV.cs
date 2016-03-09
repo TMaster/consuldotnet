@@ -65,16 +65,18 @@ namespace Consul
         }
     }
 
-    [Serializable]
     public class InvalidKeyPairException : Exception
     {
         public InvalidKeyPairException() { }
         public InvalidKeyPairException(string message) : base(message) { }
         public InvalidKeyPairException(string message, System.Exception inner) : base(message, inner) { }
-        protected InvalidKeyPairException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context)
-        { }
+    }
+
+    public class KeyNotFoundException : Exception
+    {
+        public KeyNotFoundException() { }
+        public KeyNotFoundException(string message) : base(message) { }
+        public KeyNotFoundException(string message, Exception inner) : base(message, inner) { }
     }
 
     /// <summary>

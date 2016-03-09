@@ -27,7 +27,6 @@ using Newtonsoft.Json;
 
 namespace Consul
 {
-    [Serializable]
     public class SemaphoreLimitConflictException : Exception
     {
         public int RemoteLimit { get; private set; }
@@ -50,16 +49,7 @@ namespace Consul
             RemoteLimit = remoteLimit;
             LocalLimit = localLimit;
         }
-
-        protected SemaphoreLimitConflictException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class SemaphoreHeldException : Exception
     {
         public SemaphoreHeldException()
@@ -75,16 +65,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected SemaphoreHeldException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class SemaphoreNotHeldException : Exception
     {
         public SemaphoreNotHeldException()
@@ -100,16 +81,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected SemaphoreNotHeldException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class SemaphoreInUseException : Exception
     {
         public SemaphoreInUseException()
@@ -125,16 +97,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected SemaphoreInUseException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class SemaphoreConflictException : Exception
     {
         public SemaphoreConflictException()
@@ -150,25 +113,12 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected SemaphoreConflictException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class SemaphoreMaxAttemptsReachedException : Exception
     {
         public SemaphoreMaxAttemptsReachedException() { }
         public SemaphoreMaxAttemptsReachedException(string message) : base(message) { }
         public SemaphoreMaxAttemptsReachedException(string message, Exception inner) : base(message, inner) { }
-        protected SemaphoreMaxAttemptsReachedException(
-          SerializationInfo info,
-          StreamingContext context) : base(info, context)
-        { }
     }
 
     /// <summary>
@@ -246,7 +196,6 @@ namespace Consul
 
         private readonly ConsulClient _client;
         private Task _sessionRenewTask;
-        private Task _monitorTask;
         internal SemaphoreOptions Opts { get; set; }
 
         public bool IsHeld
@@ -336,7 +285,7 @@ namespace Consul
                     var contender = _client.KV.Acquire(ContenderEntry(LockSession)).GetAwaiter().GetResult().Response;
                     if (!contender)
                     {
-                        throw new ApplicationException("Failed to make contender entry");
+                        throw new KeyNotFoundException("Failed to make contender entry");
                     }
 
                     var qOpts = new QueryOptions()
@@ -362,7 +311,7 @@ namespace Consul
                         }
                         catch (Exception ex)
                         {
-                            throw new ApplicationException("Failed to read prefix", ex);
+                            throw new KeyNotFoundException("Failed to read prefix", ex);
                         }
 
                         var lockPair = FindLock(pairs.Response);
@@ -404,7 +353,7 @@ namespace Consul
                         }
 
                         IsHeld = true;
-                        _monitorTask = MonitorLock(LockSession);
+                        MonitorLock(LockSession);
                         return _cts.Token;
                     }
                     throw new SemaphoreNotHeldException("Unable to acquire the semaphore with Consul");
@@ -524,7 +473,7 @@ namespace Consul
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("failed to read prefix", ex);
+                    throw new KeyNotFoundException("failed to read prefix", ex);
                 }
 
                 var lockPair = FindLock(pairs.Response);

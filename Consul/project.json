@@ -1,0 +1,39 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Consul library for .NET",
+  "authors": [ "The Consul.NET Authors" ],
+  "tags": [ "Consul" ],
+  "projectUrl": "https://github.com/PlayFab/consuldotnet",
+  "licenseUrl": "https://github.com/PlayFab/consuldotnet/blob/master/LICENSE",
+  "compilationOptions": {
+    "keyFile": "../assets/consuldotnet.snk"
+  },
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0",
+        "System.Text.RegularExpressions": "4.0.0.0"
+      },
+      "dependencies": {
+        "Microsoft.Net.Http": "2.2.29"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Net.Http": "4.0.1-beta-23516",
+        "System.Security.Cryptography.X509Certificates": "4.0.0-beta-22416",
+        "System.Net.Http.WinHttpHandler": "4.0.0-beta-23516",
+        "System.Text.RegularExpressions": "4.0.11-beta-23516",
+        "System.Threading.Thread": "4.0.0-beta-23516"
+      }
+    }
+  },
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1"
+  }
+}

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Consul
 {
-    [Serializable]
     public class LockHeldException : Exception
     {
         public LockHeldException()
@@ -21,16 +19,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected LockHeldException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class LockNotHeldException : Exception
     {
         public LockNotHeldException()
@@ -46,16 +35,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected LockNotHeldException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class LockInUseException : Exception
     {
         public LockInUseException()
@@ -71,16 +51,7 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected LockInUseException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-    [Serializable]
     public class LockConflictException : Exception
     {
         public LockConflictException()
@@ -96,26 +67,12 @@ namespace Consul
             : base(message, inner)
         {
         }
-
-        protected LockConflictException(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
-
-
-    [Serializable]
     public class LockMaxAttemptsReachedException : Exception
     {
         public LockMaxAttemptsReachedException() { }
         public LockMaxAttemptsReachedException(string message) : base(message) { }
         public LockMaxAttemptsReachedException(string message, Exception inner) : base(message, inner) { }
-        protected LockMaxAttemptsReachedException(
-          SerializationInfo info,
-          StreamingContext context) : base(info, context)
-        { }
     }
 
     /// <summary>
@@ -153,7 +110,6 @@ namespace Consul
 
         private CancellationTokenSource _cts;
         private Task _sessionRenewTask;
-        private Task _monitorTask;
 
         private readonly ConsulClient _client;
         internal LockOptions Opts { get; set; }
@@ -291,7 +247,7 @@ namespace Consul
                                     return _cts.Token;
                                 }
                                 IsHeld = true;
-                                _monitorTask = MonitorLock();
+                                MonitorLock();
                                 return _cts.Token;
                             }
 
@@ -311,7 +267,7 @@ namespace Consul
                         if (locked)
                         {
                             IsHeld = true;
-                            _monitorTask = MonitorLock();
+                            MonitorLock();
                             return _cts.Token;
                         }
 
@@ -762,7 +718,7 @@ namespace Consul
                 action();
             }
         }
-
+#if DNX451
         /// <summary>
         /// Do not use unless you need this. Executes an action in a new thread under a lock, ABORTING THE THREAD if the lock is lost and the action does not complete within the lock-delay.
         /// </summary>
@@ -850,5 +806,6 @@ namespace Consul
                 throw new TimeoutException("Thread was aborted because the lock was lost and the action did not complete within the lock delay");
             }
         }
+#endif
     }
 }

@@ -86,7 +86,11 @@ namespace Consul
                 _httpauth = value;
                 if (_httpauth != null)
                 {
+#if DNX451
                     (Handler as WebRequestHandler).Credentials = _httpauth;
+#else
+                    (Handler as WinHttpHandler).ServerCredentials = _httpauth;
+#endif
                 }
             }
         }
@@ -106,9 +110,16 @@ namespace Consul
                 _clientCertificate = value;
                 if (_clientCertificate != null)
                 {
+#if DNX451
                     var handler = (Handler as WebRequestHandler);
                     handler.ClientCertificates.Add(_clientCertificate);
                     handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+#else
+                    var handler = (Handler as WinHttpHandler);
+                    handler.ClientCertificates.Add(_clientCertificate);
+                    handler.ClientCertificateOption = ClientCertificateOption.Manual;
+#endif
+
                 }
             }
         }
@@ -136,9 +147,12 @@ namespace Consul
         public ConsulClientConfiguration()
         {
             UriBuilder consulAddress = new UriBuilder("http://127.0.0.1:8500");
+#if DNX451
             Handler = new WebRequestHandler();
+#else
+            Handler = new WinHttpHandler();
+#endif
             ConfigureFromEnvironment(consulAddress);
-
             Address = consulAddress.Uri;
         }
 
@@ -196,8 +210,13 @@ namespace Consul
                 {
                     if (verifySsl == "0" || bool.Parse(verifySsl))
                     {
+#if DNX451
                         (Handler as WebRequestHandler).ServerCertificateValidationCallback +=
                             (sender, cert, chain, sslPolicyErrors) => true;
+#else
+                        (Handler as WinHttpHandler).ServerCertificateValidationCallback +=
+                            (sender, cert, chain, sslPolicyErrors) => true;
+#endif
                     }
                 }
                 catch (Exception ex)

@@ -1,0 +1,46 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Consul.Test Class Library",
+  "authors": [ "Tiru" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "compilationOptions": {
+    "keyFile": "../assets/consuldotnet.snk"
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Runtime": "4.0.0.0",
+        "System.Threading.Tasks": "4.0.0.0"
+      },
+      "dependencies": {
+        "xunit.runner.visualstudio": "2.1.0",
+        "Xunit.SkippableFact": "1.2.14"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Net.Http": "4.0.1-beta-23516",
+        "System.Security.Cryptography.X509Certificates": "4.0.0-beta-22416",
+        "System.Net.Http.WinHttpHandler": "4.0.0-beta-23516",
+        "xunit.runner.dnx": "2.1.0-rc1-build204",
+        "Xunit.SkippableFact": "1.2.14",
+        "System.Threading.Tasks.Parallel": "4.0.1-beta-23516"
+      }
+    }
+  },
+  "dependencies": {
+    "Consul": "",
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204"
+  }
+}
