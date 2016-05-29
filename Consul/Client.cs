@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using Consul.Interfaces;
 
 namespace Consul
 {
@@ -468,6 +469,17 @@ namespace Consul
             {
                 throw new ArgumentException("HttpClient must accept the application/json content type", "client");
             }
+        }
+
+        /// <summary>
+        /// Initializes a new Consul client using a <see cref="IConsulClientFactory"/> to initialize the HttpClient and the Configuration
+        /// </summary>
+        /// <param name="clientFactory">Factoty to initialzie the configuration and the Http client</param>
+        public ConsulClient(IConsulClientFactory clientFactory)
+        {
+            Config = clientFactory.CreateConsulConfiguration();
+
+            HttpClient = clientFactory.CreateHttpClient();
         }
 
         #region IDisposable Support

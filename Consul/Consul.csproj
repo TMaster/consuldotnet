@@ -56,6 +56,7 @@
     <Compile Include="Event.cs" />
     <Compile Include="Health.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Interfaces\IConsulClientFactory.cs" />
     <Compile Include="Interfaces\ICoordinateEndpoint.cs" />
     <Compile Include="Interfaces\IDisposableLock.cs" />
     <Compile Include="Interfaces\IDistributedLock.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Interfaces\ISessionEndpoint.cs" />
     <Compile Include="Interfaces\IStatusEndpoint.cs" />
     <Compile Include="PreparedQuery.cs" />
+    <Compile Include="Utilities\BaseConsulClientFactory.cs" />
     <Compile Include="Utilities\JsonConverters.cs" />
     <Compile Include="KV.cs" />
     <Compile Include="Lock.cs" />
